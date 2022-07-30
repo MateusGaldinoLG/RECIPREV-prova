@@ -19,7 +19,7 @@ export class Operation{
     @CreateDateColumn({
         default: () => `DATE('now')`
     })
-    date: string;
+    date: Date;
 
     @Column()
     num_cotas: number;

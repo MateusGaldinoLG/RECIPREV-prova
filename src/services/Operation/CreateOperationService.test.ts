@@ -20,7 +20,7 @@ describe('CreateOperationService', () => {
             cnpj: '11.511.517/0001-61',
             razao_social: 'Fundo exemplo',
             tipo: 'compra',
-            date: '2021-10-22',
+            date: new Date('2021-10-22'),
             num_cotas: 1,
             valor_unitario: 1.03000
         })
@@ -30,7 +30,7 @@ describe('CreateOperationService', () => {
             cnpj: '11.511.517/0001-61',
             razao_social: 'Fundo exemplo',
             tipo: 'compra',
-            date: '2021-10-22',
+            date: new Date('2021-10-22'),
             num_cotas: 1,
             valor_unitario: 1.03000
         })
@@ -45,6 +45,6 @@ describe('CreateOperationService', () => {
             valor_unitario: 1.03000
         })
 
-        expect(result.date).toBe(new Date().toISOString().split('T')[0]); //can't compare two now operations directly
+        expect(result.date.toISOString().split('T')[0]).toBe(new Date().toISOString().split('T')[0]); //can't compare two now operations directly
     })
 })

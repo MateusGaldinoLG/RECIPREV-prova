@@ -6,7 +6,7 @@ interface IOperation{
     cnpj: string;
     razao_social: string;
     tipo: string;
-    date?: string;
+    date?: Date;
     num_cotas: number;
     valor_unitario: number;
 }
@@ -27,7 +27,7 @@ class CreateOperationService{
                 
         await operationRepository.save(operation);
         
-        operation.date = new Date(operation.date).toISOString().split('T')[0]; // transform to yyyy-mm-dd
+        operation.date = new Date(operation.date); // transform to yyyy-mm-dd
 
         return operation;
     }
