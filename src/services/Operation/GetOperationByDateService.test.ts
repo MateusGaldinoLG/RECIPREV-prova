@@ -28,7 +28,8 @@ describe('GetOperationByDateService', () => {
         })
 
         const operation = await getOperationByDateService.execute({
-            begin_date: new Date('2021-10-22')
+            cnpj: result.cnpj,
+            end_date: new Date('2021-10-22')
         });
 
         expect(operation).toHaveLength(1);
@@ -55,6 +56,7 @@ describe('GetOperationByDateService', () => {
         })
 
         const operations = await getOperationByDateService.execute({
+            cnpj: '11.511.517/0001-61',
             begin_date: new Date('2021-10-22'),
             end_date: new Date('2021-10-24')
         });
@@ -70,7 +72,8 @@ describe('GetOperationByDateService', () => {
 
     it('Should return error if no operation is in date range', async () => {
         await expect(getOperationByDateService.execute({
-            begin_date: new Date('2022-07-30')
+            cnpj: '11.511.517/0001-61',
+            end_date: new Date('2002-07-30')
         })).rejects.toThrowError('No operation in date range')
     })
 })

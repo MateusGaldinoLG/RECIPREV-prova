@@ -4,7 +4,7 @@ import { verify } from "jsonwebtoken";
 const JWTKey = 'RECIPREV';
 
 interface IAdminPayload{
-    is_admin: boolean;
+    admin: boolean;
 }
 
 function ensureUser(req: Request, res: Response, next: NextFunction){
@@ -28,17 +28,18 @@ function ensureUser(req: Request, res: Response, next: NextFunction){
 
 function ensureAdmin(req: Request, res: Response, next: NextFunction){
     const jwtoken = req.headers.authorization;
+    // console.log(req);
 
     if(!jwtoken){
-        return res.status(401).end();
+        return res.status(401).json('No Token was Found');
     }
 
     const token = jwtoken.split(" ")[1];
 
     try{
-        const {is_admin} = verify(token, JWTKey) as IAdminPayload;
-        if(!is_admin){
-            res.status(401).end();
+        const {admin} = verify(token, JWTKey) as IAdminPayload;
+        if(!admin){
+            return res.status(401).json('Not Admin');
         }
     } catch (error) {
         return res.status(401).end();

@@ -8,7 +8,7 @@ class CreateOperationController{
 
         const {cnpj, razao_social, tipo, num_cotas, valor_unitario, date} = req.body;
 
-        if(tipo != "COMPRA" && tipo != "VENDA"){
+        if(tipo !== "COMPRA" && tipo !== "VENDA"){
             throw new Error('Tipo invalido')
         }
 
