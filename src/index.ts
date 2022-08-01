@@ -55,6 +55,6 @@ app.use((err: Error, request: Request, response: Response, next: NextFunction)=>
     })
 })
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
     console.log(`Server is up http://localhost:${PORT}`)
 })
