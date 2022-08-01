@@ -19,6 +19,12 @@ app.use(userRouter);
 app.use(operationRouter);
 app.use(viewsRouter);
 
+app.get('/', (req: Request, res: Response) => {
+    return res.redirect('/app');
+})
+
+console.log(process.env.NODE_ENV);
+
 app.use((err: Error, request: Request, response: Response, next: NextFunction)=>{
     if(err instanceof Error){
         if(err.message.includes("not found")){
