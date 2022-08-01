@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RECIPREV</title>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Vuejs -->
+    <script type="module">
+      import { createApp } from "https://unpkg.com/petite-vue?module";
+      createApp({
+        data: {
+            operations: []
+        },
+        editDetails: {
+          cnpj: '',
+          date: '',
+          num_cotas: '',
+          valor_unitario: 0,
+          novo_num_cotas: 0,
+          isEdit: false
+        },
+        getOperations(){
+            const instance = axios.create({
+              headers: {
+                    'Authorization': `Bearer ${window.localStorage.getItem('token').trim()}`
+                }
+            })
+            instance.get('/operations')
+            .then((res) => {
+                this.data.operations = res.data;
+                console.log(this.data.operations[0]);
+            })
+            .catch((error) => console.error(error));   
+        },
+        setOperation(operation){
+          this.editDetails.cnpj = operation.cnpj;
+          this.editDetails.date = operation.date.split('T')[0];
+          this.editDetails.num_cotas = operation.num_cotas;
+          this.editDetails.valor_unitario = operation.valor_unitario;
+          this.editDetails.isEdit = true;
+        },
+        editOperation(){
+          const instance = axios.create({
+              headers: {
+                    'Authorization': `Bearer ${window.localStorage.getItem('token').trim()}`
+                }
+            })
+            instance.put('/operation', this.editDetails)
+            .then((res) => {
+                location.reload();
+                console.log(res);
+            })
+            .catch((error) => console.error(error));   
+        },
+        deleteOperation(id){
+          const instance = axios.create({
+              headers: {
+                    'Authorization': `Bearer ${window.localStorage.getItem('token').trim()}`
+                }
+            })
+            instance.delete(`/operation/${id}`)
+            .then((res) => {
+                location.reload();
+                console.log(res);
+            })
+            .catch((error) => console.error(error));  
+        }
+      }).mount("#body")
+    </script>
+</head>
+<body id="body" v-scope @vue:mounted="getOperations()">
+    <div class="container">
+      <header class="d-flex justify-content-center py-3">
+        <ul class="nav nav-pills">
+          <li class="nav-item"><a href="#" class="nav-link" aria-current="page">RECIPREV</a></li>
+          <li class="nav-item"><a href="#" class="nav-link active">Operations</a></li>
+          <li class="nav-item"><a href="/app/search" class="nav-link">Search</a></li>
+          <li class="nav-item"><a href="/app/create" class="nav-link">Create</a></li>
+        </ul>
+      </header>
+    </div>
+    <div class="container">
+        <h1>Operations</h1>
+        <p>All the operations</p>
+        <div v-if="editDetails.isEdit">
+          <h3>Inform new number of quotas for the operation: </h3>
+          <label for="">New Quota Value </label>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">{{editDetails.cnpj}}</span>
+            <span class="input-group-text" id="basic-addon1">{{editDetails.valor_unitario}}</span>
+            <span class="input-group-text" id="basic-addon1">{{editDetails.date}}</span>
+            <span class="input-group-text" id="basic-addon1">{{editDetails.num_cotas}}</span>
+            <input type="text" placeholder="novo numero de cotas" v-model="editDetails.novo_num_cotas">
+          </div>
+          <button @click="editOperation">Submit</button>
+        </div>
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">CPNJ</th>
+                <th scope="col">Razão social</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Data da consulta</th>
+                <th scope="col">Valor unitário da cota</th>
+                <th scope="col">Número de cotas</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="operation in data.operations">
+                <th scope="row">{{operation.cnpj}}</th>
+                <td>{{operation.razao_social}}</td>
+                <td>{{operation.tipo}}</td>
+                <td>{{operation.date}}</td>
+                <td>{{operation.valor_unitario}}</td>
+                <td>{{operation.num_cotas}}</td>
+                <td><div>
+                  <button class="btn btn-primary" @click.prevent="setOperation(operation)">Edit</button>
+                  <button class="btn btn-outline-danger" @click.prevent="deleteOperation(operation.id)">Remove</button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+</body>
+</html>

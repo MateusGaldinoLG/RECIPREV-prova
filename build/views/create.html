@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RECIPREV</title>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- Vuejs -->
+    <script type="module">
+      import { createApp } from "https://unpkg.com/petite-vue?module";
+      createApp({
+        fields: {
+          cnpj: "",
+          razao_social: "",
+          tipo: "",
+          valor_unitario: '',
+          num_cotas: "",
+          hasError: false,
+          error: ''
+        },
+        createOperation(){
+            this.fields.cnpj = this.fields.cnpj.replace(/[^\d]+/g,'');
+
+            console.log(this.fields);
+            
+            const instance = axios.create({
+              headers: {
+                    'Authorization': `Bearer ${window.localStorage.getItem('token').trim()}`
+                }
+            })
+            instance.post(`/operation`, {
+              cnpj: this.fields.cnpj,
+              razao_social: this.fields.razao_social,
+              tipo: this.fields.tipo,
+              num_cotas: this.fields.num_cotas,
+              valor_unitario: this.fields.valor_unitario,
+              date: '2021-07-23'
+            })
+            .then(this.handleResponse)
+            .catch((error) => {
+                console.log(error);
+                this.fields.hasResponse = true;
+                this.fields.hasError = true;
+                this.fields.error = error.response.data.error
+            });          
+        },
+        handleResponse(response){
+          if(response.status === 201){
+            this.fields.response = response.data
+            this.fields.hasResponse = true;
+            this.fields.hasError = false;
+          }
+        }
+      }).mount("#body")
+    </script>
+</head>
+<body id="body" v-scope>
+    <div class="container">
+      <header class="d-flex justify-content-center py-3">
+        <ul class="nav nav-pills">
+          <li class="nav-item"><a href="#" class="nav-link" aria-current="page">RECIPREV</a></li>
+          <li class="nav-item"><a href="/app/operations" class="nav-link">Operations</a></li>
+          <li class="nav-item"><a href="/app/search" class="nav-link">Search</a></li>
+          <li class="nav-item"><a href="#" class="nav-link active">Create</a></li>
+        </ul>
+      </header>
+    </div>
+    <div class="container">
+        <h1>Create Operation</h1>
+        <p>Enter the operation details here</p>
+    </div>
+    <div class="container">
+        <form @submit.prevent="">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">CPNJ</span>
+                <input type="text" class="form-control" placeholder="11.111.111/1111-11" aria-label="CNPJ" aria-describedby="basic-addon1" v-model="fields.cnpj">
+            </div>
+            
+            <label>Razão Social</label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" aria-label="CNPJ" aria-describedby="basic-addon1" v-model="fields.razao_social">
+            </div>
+            <label for="inputState">Tipo</label>
+            <div class="input-group mb-3">
+                <select id="inputState" class="form-control" v-model="fields.tipo">
+                  <option selected>COMPRA</option>
+                  <option>VENDA</option>
+                </select>
+            </div>
+            <label for="quota">Número de Cotas</label>
+            <div class="input-group mb-3">
+                <input id="quota" type="text" class="form-control" aria-label="Quota" aria-describedby="basic-addon2" v-model="fields.num_cotas">
+            </div>
+            <label for="quota">Valor da Cota de hoje</label>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon2">R$</span>
+                <input id="quota" type="text" class="form-control" placeholder="1.02" aria-label="Quota" aria-describedby="basic-addon2" v-model="fields.valor_unitario">
+            </div>
+            <button type="submit" class="btn btn-primary" @click.prevent="createOperation">Create</button>
+        </form>
+        <div v-if="fields.hasError">
+            {{fields.error}}
+        </div>
+    </div>
+</body>
+</html>
