@@ -36,7 +36,7 @@
         handleResponse(response){
           if(response.status === 201){
             console.log('Success');
-            window.location.href="http://localhost:3000/app/login"
+            window.location.href = `${window.location.protocol}//${window.location.hostname}/app/login`
           } else{
             console.log('Failure');
           }
