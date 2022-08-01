@@ -36,6 +36,8 @@
         },
         searchOperation(){
             this.fields.cnpj = this.fields.cnpj.replace(/[^\d]+/g,'');
+
+            console.log(this.fields.cnpj);
             
             const instance = axios.create({
               headers: {
