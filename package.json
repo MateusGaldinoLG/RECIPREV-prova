@@ -2,7 +2,7 @@
   "name": "reciprev-projeto",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "postinstall": "npm run build",
     "dev": "ts-node-dev src/index.ts",
@@ -40,5 +40,8 @@
     "sqlite3": "^5.0.10",
     "typeorm": "^0.3.7",
     "uuid": "^8.3.2"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }

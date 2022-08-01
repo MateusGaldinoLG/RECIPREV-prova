@@ -8,5 +8,5 @@ exports.AppDataSource = new typeorm_1.DataSource({
     type: "sqlite",
     database: process.env.NODE_ENV === 'test' ? 'src/database/CVMTeste.sqlite' : 'src/database/CVMOperacoes.sqlite',
     entities: [User_1.User, Operation_1.Operation],
-    migrations: ["src/migrations/*.ts"]
+    migrations: [`${__dirname}/migrations/*{.js, .ts}`]
 });
