@@ -9,7 +9,7 @@ class UpdateOperationController{
         const {cnpj, date, num_cotas, valor_unitario, novo_num_cotas} = req.body;
 
         const result = updateOperationService.execute({
-            cnpj, date, num_cotas, valor_unitario, numCotasNovo: novo_num_cotas
+            cnpj, date: new Date(date), num_cotas, valor_unitario, numCotasNovo: parseFloat(novo_num_cotas)
         })
 
         return res.status(201).json(result);

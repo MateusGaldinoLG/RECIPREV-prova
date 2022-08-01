@@ -19,6 +19,14 @@
         data: {
             operations: []
         },
+        editDetails: {
+          cnpj: '',
+          date: '',
+          num_cotas: '',
+          valor_unitario: 0,
+          novo_num_cotas: 0,
+          isEdit: false
+        },
         getOperations(){
             const instance = axios.create({
               headers: {
@@ -31,6 +39,39 @@
                 console.log(this.data.operations[0]);
             })
             .catch((error) => console.error(error));   
+        },
+        setOperation(operation){
+          this.editDetails.cnpj = operation.cnpj;
+          this.editDetails.date = operation.date.split('T')[0];
+          this.editDetails.num_cotas = operation.num_cotas;
+          this.editDetails.valor_unitario = operation.valor_unitario;
+          this.editDetails.isEdit = true;
+        },
+        editOperation(){
+          const instance = axios.create({
+              headers: {
+                    'Authorization': `Bearer ${window.localStorage.getItem('token').trim()}`
+                }
+            })
+            instance.put('/operation', this.editDetails)
+            .then((res) => {
+                location.reload();
+                console.log(res);
+            })
+            .catch((error) => console.error(error));   
+        },
+        deleteOperation(id){
+          const instance = axios.create({
+              headers: {
+                    'Authorization': `Bearer ${window.localStorage.getItem('token').trim()}`
+                }
+            })
+            instance.delete(`/operation/${id}`)
+            .then((res) => {
+                location.reload();
+                console.log(res);
+            })
+            .catch((error) => console.error(error));  
         }
       }).mount("#body")
     </script>
@@ -42,13 +83,26 @@
           <li class="nav-item"><a href="#" class="nav-link" aria-current="page">RECIPREV</a></li>
           <li class="nav-item"><a href="#" class="nav-link active">Operations</a></li>
           <li class="nav-item"><a href="/app/search" class="nav-link">Search</a></li>
+          <li class="nav-item"><a href="/app/create" class="nav-link">Create</a></li>
         </ul>
       </header>
     </div>
     <div class="container">
         <h1>Operations</h1>
         <p>All the operations</p>
-        <table class="table">
+        <div v-if="editDetails.isEdit">
+          <h3>Inform new number of quotas for the operation: </h3>
+          <label for="">New Quota Value </label>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">{{editDetails.cnpj}}</span>
+            <span class="input-group-text" id="basic-addon1">{{editDetails.valor_unitario}}</span>
+            <span class="input-group-text" id="basic-addon1">{{editDetails.date}}</span>
+            <span class="input-group-text" id="basic-addon1">{{editDetails.num_cotas}}</span>
+            <input type="text" placeholder="novo numero de cotas" v-model="editDetails.novo_num_cotas">
+          </div>
+          <button @click="editOperation">Submit</button>
+        </div>
+        <table class="table table-striped">
             <thead>
               <tr>
                 <th scope="col">CPNJ</th>
@@ -57,6 +111,7 @@
                 <th scope="col">Data da consulta</th>
                 <th scope="col">Valor unitário da cota</th>
                 <th scope="col">Número de cotas</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -67,6 +122,10 @@
                 <td>{{operation.date}}</td>
                 <td>{{operation.valor_unitario}}</td>
                 <td>{{operation.num_cotas}}</td>
+                <td><div>
+                  <button class="btn btn-primary" @click.prevent="setOperation(operation)">Edit</button>
+                  <button class="btn btn-outline-danger" @click.prevent="deleteOperation(operation.id)">Remove</button>
+                </div></td>
               </tr>
             </tbody>
           </table>

@@ -13,10 +13,12 @@ class UpdateOperationService{
     async execute({cnpj, date, num_cotas, valor_unitario, numCotasNovo}: IUpdateOperation){
         const operationRepository = AppDataSource.getRepository(Operation).extend(Operation);
 
+        console.log({cnpj, date, num_cotas, valor_unitario, numCotasNovo});
+
         const operation = await operationRepository.findOne({
             where: {
                 cnpj,
-                date,
+                // date,
                 num_cotas,
                 valor_unitario
             }
@@ -24,6 +26,10 @@ class UpdateOperationService{
 
         if(!operation){
             throw new Error('No operation was found');
+        }
+        
+        if(operation.date.toISOString().split('T')[0] != date.toISOString().split('T')[0]){
+            throw new Error('Wrong operation')
         }
 
         operation.num_cotas = numCotasNovo;

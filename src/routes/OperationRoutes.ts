@@ -33,6 +33,6 @@ operationRouter.put('/operation', ensureAdmin, updateOperationController.handle)
 
 // admin can delete an operation
 
-operationRouter.delete('/operation', ensureAdmin, deleteOperationController.handle);
+operationRouter.delete('/operation/:id', ensureAdmin, deleteOperationController.handle);
 
 export {operationRouter};

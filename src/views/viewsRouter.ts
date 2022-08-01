@@ -22,5 +22,9 @@ viewsRouter.get('/app/operations', (req: Request, res: Response) => {
     console.log(path.join(__dirname));
     return res.sendFile(path.join(__dirname, '/operations.html'))
 })
+viewsRouter.get('/app/create', (req: Request, res: Response) => {
+    console.log(path.join(__dirname));
+    return res.sendFile(path.join(__dirname, '/create.html'))
+})
 
 export {viewsRouter};

@@ -5,9 +5,15 @@ class DeleteOperationController{
     async handle(req: Request, res: Response){
         const deleteOperationService = new DeleteOperationService();
 
-        const {id} = req.body;
+        const {id} = req.params;
 
-        const result = await deleteOperationService.execute(id);
+        console.log(id);
+
+        if(isNaN(parseInt(id))){
+            return res.status(401).json('Not a Number');
+        }
+
+        const result = await deleteOperationService.execute(parseInt(id));
 
         if(result.affected == 0){
             return res.status(404).json('Operation not found');
