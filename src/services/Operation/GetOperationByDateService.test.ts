@@ -61,8 +61,6 @@ describe('GetOperationByDateService', () => {
             end_date: new Date('2021-10-24')
         });
 
-        console.log(operations);
-
         expect(operations).toHaveLength(3); // 1 do test passado + 2 do test atual
 
         operations.forEach((operation) => {

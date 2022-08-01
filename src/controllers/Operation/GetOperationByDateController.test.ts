@@ -49,7 +49,6 @@ describe('GetOperationByDateController', () => {
         request.params.cnpj = '11.511.517/0001-61'
 
         await getOperationByDateController.handle(request, response);
-        console.log(response.state.json);
 
         expect(response.state.status).toBe(201);
         expect(response.state.json).toMatchObject({
@@ -98,16 +97,15 @@ describe('GetOperationByDateController', () => {
     it('Should return 401 if quota value is wrong', async () => {
         const request = {
             body: {
-                end_date: new Date('2021-01-01'),
-                valor_cotas: 1.04
+                end_date: new Date('2021-01-01')
             },
             params: {}
         } as Request;
-        // request.params.cnpj = '11.511.517/0001-61'
+        request.params.cnpj = '11.511.517/0001-61'
 
         await getOperationByDateController.handle(request, response);
 
         expect(response.state.status).toBe(401);
-        expect(response.state.json).toBe('No CPNJ informed');
+        expect(response.state.json).toBe('No quota value');
     })
 })

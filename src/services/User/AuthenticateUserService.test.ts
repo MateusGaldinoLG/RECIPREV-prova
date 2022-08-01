@@ -16,7 +16,7 @@ describe('AuthenticateUserService', () => {
     })
 
     afterAll(async () => {
-        await AppDataSource.query('DELETE FROM users')
+        await AppDataSource.query('DELETE FROM users;')
         await AppDataSource.destroy();
     })
 
@@ -33,7 +33,7 @@ describe('AuthenticateUserService', () => {
 
         const {email, admin, sub} = verify(token, 'RECIPREV') as ITokenPayload;
 
-        expect(email).toBe('testing@gmail.com');
+        expect(email).toBe('testinauthg@gmail.com');
         expect(admin).toBe(false);
         expect(sub).toBe(user.id);
     })

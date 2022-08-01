@@ -17,7 +17,7 @@ describe('CreateUserService', () => {
     })
 
     afterAll(async () => {
-        await AppDataSource.query('DELETE FROM users')
+        await AppDataSource.query('DELETE FROM users;')
         await AppDataSource.destroy();
     })
 

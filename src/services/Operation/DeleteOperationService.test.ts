@@ -28,8 +28,6 @@ describe('DeleteOperationService', () => {
 
         const result = await deleteOperationService.execute(operation.id);
 
-        console.log(result);
-
         expect(result.affected).toBe(1);
     })
 

@@ -29,10 +29,9 @@ describe('DeleteOperationController', () => {
             valor_unitario: 1.03000
         });
         const request = {
-            body: {
-                id: operation.id
-            }
+            params: {}
         } as Request;
+        request.params.id = '1';
 
         await deleteOperationController.handle(request, response);
 
@@ -42,10 +41,9 @@ describe('DeleteOperationController', () => {
 
     it('Should return 404 if no operation was found', async () => {
         const request = {
-            body: {
-                id: 15
-            }
+            params: {}
         } as Request;
+        request.params.id = '15';
 
         await deleteOperationController.handle(request, response);
 

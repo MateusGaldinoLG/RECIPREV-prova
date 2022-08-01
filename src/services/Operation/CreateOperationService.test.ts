@@ -26,7 +26,7 @@ describe('CreateOperationService', () => {
         })
 
         expect(result).toMatchObject<Operation>({
-            id: 1,
+            id: 6,
             cnpj: '11.511.517/0001-61',
             razao_social: 'Fundo exemplo',
             tipo: 'compra',
