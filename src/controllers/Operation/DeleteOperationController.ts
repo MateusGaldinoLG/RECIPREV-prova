@@ -7,8 +7,6 @@ class DeleteOperationController{
 
         const {id} = req.params;
 
-        console.log(id);
-
         if(isNaN(parseInt(id))){
             return res.status(401).json('Not a Number');
         }

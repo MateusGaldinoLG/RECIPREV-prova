@@ -80,8 +80,6 @@ class GetOperationByDateController{
         const retorno = darRetorno(preco_medio, valor_cotas);
         const saldo = darSaldo(operations, valor_cotas);
 
-        console.log(newCnpj);
-
         const operationDetails: OperationDTO = {
             cnpj: newCnpj,
             razao_social: operations[0].razao_social,
